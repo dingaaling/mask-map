@@ -1,0 +1,39 @@
+.App-header {
+  background-color: #A9CEF4;
+  font-size: calc(20px + 3vmin);
+  font-family: 'Roboto Condensed', sans-serif;
+  /* font-family: 'ABeeZee', sans-serif; */
+  color: #FFFFFF;
+}
+
+.App-body {
+  background-color: #FFFFFF;
+  font-size: calc(8px + 1vmin);
+  color: #000000;
+}
+
+h1 {
+    line-height: 250%;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    font-family: 'Roboto Condensed', sans-serif;
+}
+
+
+h3 {
+    line-height: 200%;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    font-family: 'Roboto Condensed', sans-serif;
+}
+
+.leaflet-container {
+    background-color: #FFFFFF;
+    height: 500px;
+    width: 100%;
+}
+
+.leaflet-tile-pane {
+  -webkit-filter: grayscale(100%);
+  filter: grayscale(100%);
+}
