@@ -2,6 +2,5 @@
   "rules": {
     ".read": "now < 1604811600000",  // 2020-11-8
     ".write": "now < 1604811600000",  // 2020-11-8
-    ".write": "!data.exists() || !newData.exists()"
   }
 }
