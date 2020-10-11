@@ -3,7 +3,7 @@ import firebase from './config.js'
 import { render } from 'react-dom';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
-import {  Map, TileLayer } from 'react-leaflet'
+import {  Map, TileLayer, Marker } from 'react-leaflet'
 import './App.css'
 import config from './config'
 import glasses from './images/glasses.png'
@@ -20,7 +20,7 @@ NO_MASK = '2';
 
   constructor(props) {
     super(props);
-    this.state = { latitude : 40.7631264, longitude : -73.95756 }
+    this.state = { latitude : 40.76323091716227, longitude : -73.95748477284218 }
   }
 
   imageClick = (maskStatus) => {
@@ -42,7 +42,7 @@ NO_MASK = '2';
 
           });
       } else {
-          alert("Sorry, your browser does not support HTML5 geolocation.");
+          alert("Geolocation error - please refresh page.");
       }
   }
 
@@ -89,8 +89,8 @@ render(){
           <Grid item xs={6}>
                 <Map center={[this.state.latitude, this.state.longitude]} zoom={13}>
                 <TileLayer
-                  attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                  url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
+                  attribution='&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
+                  url='https://{s}.tile.osm.org/{z}/{x}/{y}.png'
                 />
                 </Map>
           </Grid>
