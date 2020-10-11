@@ -11,7 +11,6 @@
       name="description"
       content="Web site created using create-react-app"
     />
-    <link rel="apple-touch-icon" href="logo192.png" />
     <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
@@ -34,8 +33,42 @@
     integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
     crossorigin=""></script>
 
+    <script>
+    var x = document.getElementById("result");
+
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition, showError);
+        } else {
+            console.log("Geolocation is not supported by this browser.");
+        }
+    }
+    function showPosition(position) {
+        console.log("Logging at: " + position.coords.latitude.toString() +", "+ position.coords.longitude.toString());
+    }
+
+    function showError(error) {
+      switch(error.code) {
+        case error.PERMISSION_DENIED:
+          alert("User denied the request for Geolocation.")
+          break;
+        case error.POSITION_UNAVAILABLE:
+          alert("Location information is unavailable.")
+          break;
+        case error.TIMEOUT:
+          alert("The request to get user location timed out.")
+          break;
+        case error.UNKNOWN_ERROR:
+          alert("An unknown error occurred.")
+          break;
+      }
+    }
+
+  </script>
+
   </head>
-  <body>
+  <body onload="getLocation()">
+
     <div id="root"></div>
   </body>
 </html>
