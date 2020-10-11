@@ -6,6 +6,7 @@ import Button from '@material-ui/core/Button';
 import {  Map, TileLayer, Marker } from 'react-leaflet'
 import './App.css'
 import config from './config'
+import { iconGlasses, iconMaskhole, iconNoMask } from './icon';
 import glasses from './images/glasses.png'
 import mask from './images/mask.png'
 import no_mask from './images/no_mask.png'
@@ -20,8 +21,46 @@ NO_MASK = '2';
 
   constructor(props) {
     super(props);
-    this.state = { latitude : 40.76323091716227, longitude : -73.95748477284218 }
+    this.state = { latitude : 40.76323091716227, longitude : -73.95748477284218 };
+    this.showPosition = this.showPosition.bind(this)
+
   }
+
+  showPosition(position) {
+      console.log("Logging at: " + position.coords.latitude.toString() +", "+ position.coords.longitude.toString());
+      this.setState({latitude : position.coords.latitude, longitude : position.coords.longitude});
+  }
+
+  showError(error) {
+    switch(error.code) {
+      case error.PERMISSION_DENIED:
+        alert("User denied the request for Geolocation.")
+        break;
+      case error.POSITION_UNAVAILABLE:
+        alert("Location information is unavailable.")
+        break;
+      case error.TIMEOUT:
+        alert("The request to get user location timed out.")
+        break;
+      case error.UNKNOWN_ERROR:
+        alert("An unknown error occurred.")
+        break;
+    }
+  }
+
+  getLocation() {
+      if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(this.showPosition, this.showError);
+      } else {
+          console.log("Geolocation is not supported by this browser.");
+      }
+  }
+
+  componentDidMount() {
+    this.getLocation()
+
+  };
+
 
   imageClick = (maskStatus) => {
       if(navigator.geolocation) {
@@ -92,6 +131,9 @@ render(){
                   attribution='&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
                   url='https://{s}.tile.osm.org/{z}/{x}/{y}.png'
                 />
+                <Marker position={[this.state.latitude, this.state.longitude]} icon={ iconGlasses }></Marker>
+                <Marker position={[this.state.latitude-0.005, this.state.longitude-0.005]} icon={ iconMaskhole }></Marker>
+                <Marker position={[this.state.latitude+0.005, this.state.longitude+0.005]} icon={ iconNoMask }></Marker>
                 </Map>
           </Grid>
           <Grid item xs={3}></Grid>
@@ -105,7 +147,7 @@ render(){
       <Grid container item xs={12} spacing={1}>
 
         <Grid item xs={6}>
-          <center><Button variant="contained" >Start Over</Button></center>
+          <center><Button variant="contained" onClick={() => window.location.reload(false)}>Start Over</Button></center>
         </Grid>
 
         <Grid item xs={6}>
