@@ -7,6 +7,7 @@ import {  Map, TileLayer, Marker } from 'react-leaflet'
 import './App.css'
 import config from './config'
 import { iconGlasses, iconMaskhole, iconNoMask } from './icon';
+import Emoji from './Emoji.js';
 import glasses from './images/glasses.png'
 import mask from './images/mask.png'
 import no_mask from './images/no_mask.png'
@@ -14,10 +15,6 @@ import maskhole from './images/maskhole.png'
 
 
 class App extends React.Component {
-
-MASK = '0';
-MASKHOLE = '1';
-NO_MASK = '2';
 
   constructor(props) {
     super(props);
@@ -98,23 +95,10 @@ render(){
 
       <Grid container item xs={12} spacing={1}>
 
-          <Grid item xs={4}>
-            <div className="emoji-mask">
-              <center><img src={glasses} onClick = {() => this.imageClick(this.MASK)} width="80"/></center>
-            </div>
-          </Grid>
+          <Emoji img={glasses} function = {() => this.imageClick(0)}></Emoji>
+          <Emoji img={maskhole} function = {() => this.imageClick(1)}></Emoji>
+          <Emoji img={no_mask} function = {() => this.imageClick(2)}></Emoji>
 
-          <Grid item xs={4}>
-            <div className="emoji-maskhole">
-              <center><img src={maskhole} onClick = {() => this.imageClick(this.MASKHOLE)} width="80"/></center>
-            </div>
-          </Grid>
-
-          <Grid item xs={4}>
-            <div className="emoji-mask">
-              <center><img src={no_mask} onClick = {() => this.imageClick(this.NO_MASK)} width="80"/></center>
-            </div>
-          </Grid>
 
       </Grid>
 
