@@ -61,19 +61,19 @@ render(){
 
           <Grid item xs={4}>
             <div className="emoji-mask">
-              <center><img src={glasses} onClick = {() => this.imageClick(this.MASK)} width="200" /></center>
+              <center><img src={glasses} onClick = {() => this.imageClick(this.MASK)} width="80"/></center>
             </div>
           </Grid>
 
           <Grid item xs={4}>
             <div className="emoji-maskhole">
-              <center><img src={maskhole} onClick = {() => this.imageClick(this.MASKHOLE)} width="200"/></center>
+              <center><img src={maskhole} onClick = {() => this.imageClick(this.MASKHOLE)} width="80"/></center>
             </div>
           </Grid>
 
           <Grid item xs={4}>
             <div className="emoji-mask">
-              <center><img src={no_mask} onClick = {() => this.imageClick(this.NO_MASK)} width="200"/></center>
+              <center><img src={no_mask} onClick = {() => this.imageClick(this.NO_MASK)} width="80"/></center>
             </div>
           </Grid>
 
