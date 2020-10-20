@@ -63,7 +63,6 @@ class App extends React.Component {
 
   imageClick(maskStatus) {
 
-      console.log("ImageClick", this)
       let current_this = this
       if(navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(function(position) {
@@ -77,9 +76,9 @@ class App extends React.Component {
                 accuracy: position.coords.accuracy
               };
 
-              // console.log(current_this.state);
-              // firebase.database().ref('/').push(body);
-              // console.log("Data Saved");
+              console.log(current_this.state);
+              firebase.database().ref('/').push(body);
+              console.log("Data Saved");
 
               if(maskStatus==0) {
                 current_this.setState({mask_list: current_this.state.mask_list.concat([[position.coords.latitude, position.coords.longitude]])});
@@ -98,8 +97,6 @@ class App extends React.Component {
   }
 
 render(){
-
-  console.log(this.state)
 
   return (
     <div className="App">
@@ -132,9 +129,23 @@ render(){
                   attribution='&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
                   url='https://{s}.tile.osm.org/{z}/{x}/{y}.png'
                 />
-                <Marker position={this.state.map_center} icon={ iconGlasses }></Marker>
-                <Marker position={this.state.map_center} icon={ iconMaskhole }></Marker>
-                <Marker position={this.state.map_center} icon={ iconNoMask }></Marker>
+
+                {this.state.mask_list.map((position, idx) =>
+                  <Marker key={`marker-${idx}`} position={position} icon={ iconGlasses }>
+                  </Marker>
+                )}
+
+                {this.state.maskhole_list.map((position, idx) =>
+                  <Marker key={`marker-${idx}`} position={position} icon={ iconMaskhole }>
+                  </Marker>
+                )}
+
+                {this.state.nomask_list.map((position, idx) =>
+                  <Marker key={`marker-${idx}`} position={position} icon={ iconNoMask }>
+                  </Marker>
+                )}
+
+
                 </Map>
           </Grid>
           <Grid item xs={3}></Grid>
