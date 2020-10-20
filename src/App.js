@@ -18,8 +18,10 @@ class App extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { latitude : 40.76323091716227, longitude : -73.95748477284218 };
+    this.state = { map_center : [40.76323091716227, -73.95748477284218],
+                  mask_list : [], maskhole_list : [], nomask_list : [] };
     this.showPosition = this.showPosition.bind(this)
+    this.imageClick = this.imageClick.bind(this)
 
   }
 
@@ -59,7 +61,9 @@ class App extends React.Component {
   };
 
 
-  imageClick = (maskStatus) => {
+  imageClick(maskStatus) {
+
+      let current_this = this
       if(navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(function(position) {
 
@@ -72,9 +76,19 @@ class App extends React.Component {
                 accuracy: position.coords.accuracy
               };
 
-              console.log(body);
+              console.log(current_this.state);
               firebase.database().ref('/').push(body);
               console.log("Data Saved");
+
+              if(maskStatus==0) {
+                current_this.setState({mask_list: current_this.state.mask_list.concat([[position.coords.latitude, position.coords.longitude]])});
+              }
+              if(maskStatus==1) {
+                current_this.setState({maskhole_list: current_this.state.maskhole_list.concat([[position.coords.latitude, position.coords.longitude]])});
+              }
+              if(maskStatus==2) {
+                current_this.setState({nomask_list: current_this.state.nomask_list.concat([[position.coords.latitude, position.coords.longitude]])});
+              }
 
           });
       } else {
@@ -110,14 +124,28 @@ render(){
         <Grid container item xs={12} spacing={1}>
           <Grid item xs={3}></Grid>
           <Grid item xs={6}>
-                <Map center={[this.state.latitude, this.state.longitude]} zoom={13}>
+                <Map center={this.state.map_center} zoom={13}>
                 <TileLayer
                   attribution='&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
                   url='https://{s}.tile.osm.org/{z}/{x}/{y}.png'
                 />
-                <Marker position={[this.state.latitude, this.state.longitude]} icon={ iconGlasses }></Marker>
-                <Marker position={[this.state.latitude-0.005, this.state.longitude-0.005]} icon={ iconMaskhole }></Marker>
-                <Marker position={[this.state.latitude+0.005, this.state.longitude+0.005]} icon={ iconNoMask }></Marker>
+
+                {this.state.mask_list.map((position, idx) =>
+                  <Marker key={`marker-${idx}`} position={position} icon={ iconGlasses }>
+                  </Marker>
+                )}
+
+                {this.state.maskhole_list.map((position, idx) =>
+                  <Marker key={`marker-${idx}`} position={position} icon={ iconMaskhole }>
+                  </Marker>
+                )}
+
+                {this.state.nomask_list.map((position, idx) =>
+                  <Marker key={`marker-${idx}`} position={position} icon={ iconNoMask }>
+                  </Marker>
+                )}
+
+
                 </Map>
           </Grid>
           <Grid item xs={3}></Grid>
