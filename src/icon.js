@@ -13,8 +13,8 @@ const iconGlasses = new L.Icon({
 });
 
 const iconMaskhole = new L.Icon({
-    iconUrl: require('./images/maskhole.png'),
-    iconRetinaUrl: require('./images/maskhole.png'),
+    iconUrl: require('./images/maskhole_red.png'),
+    iconRetinaUrl: require('./images/maskhole_red.png'),
     iconAnchor: null,
     popupAnchor: null,
     shadowUrl: null,
@@ -25,8 +25,8 @@ const iconMaskhole = new L.Icon({
 });
 
 const iconNoMask = new L.Icon({
-    iconUrl: require('./images/no_mask.png'),
-    iconRetinaUrl: require('./images/no_mask.png'),
+    iconUrl: require('./images/no_mask_red.png'),
+    iconRetinaUrl: require('./images/no_mask_red.png'),
     iconAnchor: null,
     popupAnchor: null,
     shadowUrl: null,

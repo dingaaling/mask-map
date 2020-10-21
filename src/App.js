@@ -10,8 +10,8 @@ import { iconGlasses, iconMaskhole, iconNoMask } from './icon';
 import Emoji from './Emoji.js';
 import glasses from './images/glasses.png'
 import mask from './images/mask.png'
-import no_mask from './images/no_mask.png'
-import maskhole from './images/maskhole.png'
+import no_mask from './images/no_mask_red.png'
+import maskhole from './images/maskhole_red.png'
 
 
 class App extends React.Component {
@@ -124,7 +124,7 @@ render(){
         <Grid container item xs={12} spacing={1}>
           <Grid item xs={3}></Grid>
           <Grid item xs={6}>
-                <Map center={this.state.map_center} zoom={13}>
+                <Map center={this.state.map_center} zoom={15}>
                 <TileLayer
                   attribution='&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
                   url='https://{s}.tile.osm.org/{z}/{x}/{y}.png'
@@ -163,7 +163,7 @@ render(){
         </Grid>
 
         <Grid item xs={6}>
-          <center><Button variant="contained" >Share Map</Button></center>
+          <center><Button variant="contained" >View Stats</Button></center>
         </Grid>
 
       </Grid>
