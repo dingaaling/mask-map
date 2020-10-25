@@ -14,12 +14,15 @@ import no_mask from './images/no_mask_red.png'
 import maskhole from './images/maskhole_red.png'
 
 
+const password_list = ["dev", "maskmapnyc", "maskmaptx", "maskmapldn"]
+
 class App extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = { map_center : [40.76323091716227, -73.95748477284218],
-                  mask_list : [], maskhole_list : [], nomask_list : [] };
+                  mask_list : [], maskhole_list : [], nomask_list : [],
+                  password : "None"};
     this.showPosition = this.showPosition.bind(this)
     this.imageClick = this.imageClick.bind(this)
 
@@ -57,6 +60,10 @@ class App extends React.Component {
 
   componentDidMount() {
     this.getLocation()
+    const input_pass = prompt('Please Input Password')
+    this.setState({ password : input_pass }, () => {
+      console.log(this.state)
+    })
 
   };
 
@@ -73,10 +80,11 @@ class App extends React.Component {
                 mask_status: maskStatus,
                 latitude : position.coords.latitude,
                 longitude : position.coords.longitude,
-                accuracy: position.coords.accuracy
+                accuracy: position.coords.accuracy,
+                password: current_this.state.password
               };
 
-              console.log(current_this.state);
+              // console.log(body)
               firebase.database().ref('/').push(body);
               console.log("Data Saved");
 
@@ -90,6 +98,9 @@ class App extends React.Component {
                 current_this.setState({nomask_list: current_this.state.nomask_list.concat([[position.coords.latitude, position.coords.longitude]])});
               }
 
+              current_this.setState({map_center: [position.coords.latitude, position.coords.longitude]});
+
+
           });
       } else {
           alert("Geolocation error - please refresh page.");
@@ -98,81 +109,101 @@ class App extends React.Component {
 
 render(){
 
-  return (
-    <div className="App">
+  if(password_list.includes(this.state.password)){
 
-      <header className="App-header">
-        <h1><center>MASK MAP</center></h1>
-      </header>
+    return (
 
-      <br></br><br></br>
+      <div className="App">
 
-      <Grid container item xs={12} spacing={1}>
+        <header className="App-header">
+          <h1><center>MASK MAP</center></h1>
+        </header>
 
-          <Emoji img={glasses} function = {() => this.imageClick(0)}></Emoji>
-          <Emoji img={maskhole} function = {() => this.imageClick(1)}></Emoji>
-          <Emoji img={no_mask} function = {() => this.imageClick(2)}></Emoji>
-
-
-      </Grid>
-
-      <br></br><br></br><br></br><br></br>
-
-
-      <div className="leaflet-container">
+        <br></br>
 
         <Grid container item xs={12} spacing={1}>
+
+            <Emoji img={glasses} function = {() => this.imageClick(0)}></Emoji>
+            <Emoji img={maskhole} function = {() => this.imageClick(1)}></Emoji>
+            <Emoji img={no_mask} function = {() => this.imageClick(2)}></Emoji>
+
+
+        </Grid>
+
+        <Grid container item xs={12} spacing={1}>
+          <Grid item xs={4}>
+            <p><center>{this.state.mask_list.length}</center></p>
+          </Grid>
+          <Grid item xs={4}>
+            <p><center>{this.state.maskhole_list.length}</center></p>
+          </Grid>
+          <Grid item xs={4}>
+            <p><center>{this.state.nomask_list.length}</center></p>
+          </Grid>
+
+        </Grid>
+
+        <div className="leaflet-container">
+
+          <Grid container item xs={12} spacing={1}>
+            <Grid item xs={2}></Grid>
+            <Grid item xs={8}>
+                  <Map center={this.state.map_center} zoom={15}>
+                  <TileLayer
+                    attribution='&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
+                    url='https://{s}.tile.osm.org/{z}/{x}/{y}.png'
+                  />
+
+                  {this.state.mask_list.map((position, idx) =>
+                    <Marker key={`marker-${idx}`} position={position} icon={ iconGlasses }>
+                    </Marker>
+                  )}
+
+                  {this.state.maskhole_list.map((position, idx) =>
+                    <Marker key={`marker-${idx}`} position={position} icon={ iconMaskhole }>
+                    </Marker>
+                  )}
+
+                  {this.state.nomask_list.map((position, idx) =>
+                    <Marker key={`marker-${idx}`} position={position} icon={ iconNoMask }>
+                    </Marker>
+                  )}
+
+
+                  </Map>
+            </Grid>
+            <Grid item xs={2}></Grid>
+
+          </Grid>
+          </div>
+
+        <br></br>
+
+        <Grid container item xs={12} spacing={1}>
+
           <Grid item xs={3}></Grid>
           <Grid item xs={6}>
-                <Map center={this.state.map_center} zoom={15}>
-                <TileLayer
-                  attribution='&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
-                  url='https://{s}.tile.osm.org/{z}/{x}/{y}.png'
-                />
-
-                {this.state.mask_list.map((position, idx) =>
-                  <Marker key={`marker-${idx}`} position={position} icon={ iconGlasses }>
-                  </Marker>
-                )}
-
-                {this.state.maskhole_list.map((position, idx) =>
-                  <Marker key={`marker-${idx}`} position={position} icon={ iconMaskhole }>
-                  </Marker>
-                )}
-
-                {this.state.nomask_list.map((position, idx) =>
-                  <Marker key={`marker-${idx}`} position={position} icon={ iconNoMask }>
-                  </Marker>
-                )}
-
-
-                </Map>
+            <center><Button variant="contained" onClick={() => window.location.reload(false)}>Start Over</Button></center>
           </Grid>
           <Grid item xs={3}></Grid>
 
         </Grid>
-        </div>
 
-      <br></br><br></br><br></br><br></br>
+      </div>
+    );
+  }
 
+  else{
+    return(
+      <div className="App">
 
-      <Grid container item xs={12} spacing={1}>
+        <header className="App-header">
+          <h2><center>Please Enter Correct Password</center></h2>
+        </header>
 
-        <Grid item xs={6}>
-          <center><Button variant="contained" onClick={() => window.location.reload(false)}>Start Over</Button></center>
-        </Grid>
-
-        <Grid item xs={6}>
-          <center><Button variant="contained" >View Stats</Button></center>
-        </Grid>
-
-      </Grid>
-
-      <br></br><br></br>
-
-
-    </div>
-  );
+      </div>
+    );
+  }
 }
 
 }
