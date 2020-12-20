@@ -35,9 +35,10 @@ h3 {
 
 .leaflet-container {
     background-color: #FFFFFF;
-    height: 250px;
+    height: 500px;
     width: 100%;
 }
+
 
 .leaflet-tile-pane {
   -webkit-filter: grayscale(100%);

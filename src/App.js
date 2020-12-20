@@ -4,6 +4,7 @@ import { render } from 'react-dom';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import {  Map, TileLayer, Marker } from 'react-leaflet'
+import HeatmapLayer from 'react-leaflet-heatmap-layer';
 import './App.css'
 import config from './config'
 import { iconGlasses, iconMaskhole, iconNoMask } from './icon';
@@ -12,6 +13,7 @@ import glasses from './images/glasses.png'
 import mask from './images/mask.png'
 import no_mask from './images/no_mask_red.png'
 import maskhole from './images/maskhole_red.png'
+import { nycdata, nycdata_weekend, nycdata_weekday } from './2020_maskhole_data';
 
 
 const password_list = ["dev", "maskmapnyc", "maskmaptx", "maskmapldn"]
@@ -20,7 +22,7 @@ class App extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { map_center : [40.76323091716227, -73.95748477284218],
+    this.state = { map_center : [40.762295, -73.968148],
                   mask_list : [], maskhole_list : [], nomask_list : [],
                   password : "None"};
     this.showPosition = this.showPosition.bind(this)
@@ -183,7 +185,7 @@ render(){
 
           <Grid item xs={3}></Grid>
           <Grid item xs={6}>
-            <center><Button variant="contained" onClick={() => window.location.reload(false)}>Start Over</Button></center>
+            <center><Button variant="contained" onClick={() => this.setState({password : "null"})}>View Data</Button></center>
           </Grid>
           <Grid item xs={3}></Grid>
 
@@ -198,8 +200,34 @@ render(){
       <div className="App">
 
         <header className="App-header">
-          <h2><center>Please Enter Correct Password</center></h2>
+          <h2><center>MASK MAP NYC</center></h2>
         </header>
+
+        <div className="leaflet-container">
+
+          <Grid container item xs={12} spacing={1}>
+            <Grid item xs={2}></Grid>
+            <Grid item xs={8}>
+                  <Map center={[40.762295, -73.968148]} zoom={15}>
+                  <HeatmapLayer
+                    fitBoundsOnLoad
+                    fitBoundsOnUpdate
+                    max={1.0}
+                    radius={15}
+                    points={nycdata}
+                    longitudeExtractor={m => m[1]}
+                    latitudeExtractor={m => m[0]}
+                    intensityExtractor={m => parseFloat(m[2])} />
+                  <TileLayer
+                    attribution='&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
+                    url='https://{s}.tile.osm.org/{z}/{x}/{y}.png'
+                  />
+                  </Map>
+            </Grid>
+            <Grid item xs={2}></Grid>
+
+          </Grid>
+          </div>
 
       </div>
     );

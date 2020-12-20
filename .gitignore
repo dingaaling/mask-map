@@ -12,6 +12,7 @@
 /data
 .ipynb_checkpoints/
 *.png
+*data*
 
 # testing
 /coverage
