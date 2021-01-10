@@ -1,7 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
 import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
 import {  Map, TileLayer, Marker } from 'react-leaflet'
 import HeatmapLayer from 'react-leaflet-heatmap-layer';
 
@@ -15,7 +14,6 @@ import './App.css'
 import { iconGlasses, iconMaskhole, iconNoMask } from './icon';
 import Emoji from './Emoji.js';
 import glasses from './images/glasses.png'
-import mask from './images/mask.png'
 import no_mask from './images/no_mask_red.png'
 import maskhole from './images/maskhole_red.png'
 import { nycdata } from './2020_maskhole_data';
@@ -197,7 +195,7 @@ render(){
           {
             user
               ? <button onClick={signOut}>Sign out</button>
-              : <button onClick={signInWithGoogle}>Sign in with Google</button>
+              : <button onClick={signInWithGoogle}>Sign in</button>
           }
           </center>
         </footer>
@@ -266,7 +264,7 @@ render(){
           {
             user
               ? <button onClick={signOut}>Sign out</button>
-              : <button onClick={signInWithGoogle}>Sign in with Google</button>
+              : <button onClick={signInWithGoogle}>Sign in</button>
           }
           </center>
         </footer>
