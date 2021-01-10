@@ -187,13 +187,12 @@ render(){
 
         <br></br>
 
-
         <footer>
           <center>
           {
             user
-              ? <button onClick={signOut}>Sign out</button>
-              : <button onClick={signInWithGoogle}>Sign in</button>
+              ? <button onClick={signOut}>SIGN OUT</button>
+              : <button onClick={signInWithGoogle}>SIGN IN</button>
           }
           </center>
         </footer>
@@ -250,19 +249,17 @@ render(){
           </Grid>
           </div>
 
-          <br></br>
-
         <footer>
           <center>
           {
             user
               ? <h3> </h3>
-              : <h3>Please sign in to log data.</h3>
+              : <h3>PLEASE SIGN IN TO LOG DATA</h3>
           }
           {
             user
-              ? <button onClick={signOut}>Sign out</button>
-              : <button onClick={signInWithGoogle}>Sign in</button>
+              ? <button onClick={signOut}>SIGN OUT</button>
+              : <button onClick={signInWithGoogle}>SIGN IN</button>
           }
           </center>
         </footer>

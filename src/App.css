@@ -1,6 +1,6 @@
 .App-header {
   background-color: #A9CEF4;
-  font-size: calc(14px + 1vmin);
+  font-size: calc(12px + 1vmin);
   font-family: 'Roboto Condensed', sans-serif;
   color: #FFFFFF;
 }
@@ -44,13 +44,13 @@ h3 {
 button {
 
   font-family: 'Roboto Condensed', sans-serif;
-  font-size: calc(10px + 1vmin);
+  font-size: calc(8px + 1vmin);
 
 }
 
 .leaflet-container {
     background-color: #FFFFFF;
-    height: 300px;
+    height: 225px;
     width: 100%;
 }
 
