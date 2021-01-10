@@ -86,10 +86,8 @@ class App extends React.Component {
                 accuracy: position.coords.accuracy,
               };
 
-              // console.log(body)
               firebaseApp.database().ref('/').push(body);
               console.log("Data Saved");
-              console.log(body)
 
               if(maskStatus==0) {
                 current_this.setState({mask_list: current_this.state.mask_list.concat([[position.coords.latitude, position.coords.longitude]])});
