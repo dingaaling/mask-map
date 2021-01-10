@@ -25,20 +25,34 @@ h1 {
     font-family: 'Roboto Condensed', sans-serif;
 }
 
-
-h3 {
+h2 {
     line-height: 200%;
     margin-bottom: 0px;
     margin-top: 0px;
     font-family: 'Roboto Condensed', sans-serif;
 }
 
-.leaflet-container {
-    background-color: #FFFFFF;
-    height: 500px;
-    width: 100%;
+
+h3 {
+    line-height: 200%;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: calc(10px + 1vmin);
 }
 
+button {
+
+  font-family: 'Roboto Condensed', sans-serif;
+  font-size: calc(10px + 1vmin);
+
+}
+
+.leaflet-container {
+    background-color: #FFFFFF;
+    height: 300px;
+    width: 100%;
+}
 
 .leaflet-tile-pane {
   -webkit-filter: grayscale(100%);

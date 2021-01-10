@@ -1,30 +1,38 @@
 import React from 'react';
-import firebase from './config.js'
 import { render } from 'react-dom';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import {  Map, TileLayer, Marker } from 'react-leaflet'
 import HeatmapLayer from 'react-leaflet-heatmap-layer';
+
+import withFirebaseAuth from 'react-with-firebase-auth'
+import * as firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/database';
+import firebaseConfig from './config.js'
+
 import './App.css'
-import config from './config'
 import { iconGlasses, iconMaskhole, iconNoMask } from './icon';
 import Emoji from './Emoji.js';
 import glasses from './images/glasses.png'
 import mask from './images/mask.png'
 import no_mask from './images/no_mask_red.png'
 import maskhole from './images/maskhole_red.png'
-import { nycdata, nycdata_weekend, nycdata_weekday } from './2020_maskhole_data';
+import { nycdata } from './2020_maskhole_data';
 
 
-const password_list = ["dev", "maskmapnyc", "maskmaptx", "maskmapldn"]
+const firebaseApp = firebase.initializeApp(firebaseConfig);
+const firebaseAppAuth = firebaseApp.auth();
+const providers = {
+  googleProvider: new firebase.auth.GoogleAuthProvider(),
+};
 
 class App extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = { map_center : [40.762295, -73.968148],
-                  mask_list : [], maskhole_list : [], nomask_list : [],
-                  password : "None"};
+                  mask_list : [], maskhole_list : [], nomask_list : []};
     this.showPosition = this.showPosition.bind(this)
     this.imageClick = this.imageClick.bind(this)
 
@@ -32,7 +40,7 @@ class App extends React.Component {
 
   showPosition(position) {
       console.log("Logging at: " + position.coords.latitude.toString() +", "+ position.coords.longitude.toString());
-      this.setState({latitude : position.coords.latitude, longitude : position.coords.longitude});
+      this.setState({latitude : position.coords.latitude, longitude : position.coords.longitude, map_center : [position.coords.latitude, position.coords.longitude]});
   }
 
   showError(error) {
@@ -62,11 +70,6 @@ class App extends React.Component {
 
   componentDidMount() {
     this.getLocation()
-    const input_pass = prompt('Please Input Password')
-    this.setState({ password : input_pass }, () => {
-      console.log(this.state)
-    })
-
   };
 
 
@@ -83,12 +86,12 @@ class App extends React.Component {
                 latitude : position.coords.latitude,
                 longitude : position.coords.longitude,
                 accuracy: position.coords.accuracy,
-                password: current_this.state.password
               };
 
               // console.log(body)
-              firebase.database().ref('/').push(body);
+              firebaseApp.database().ref('/').push(body);
               console.log("Data Saved");
+              console.log(body)
 
               if(maskStatus==0) {
                 current_this.setState({mask_list: current_this.state.mask_list.concat([[position.coords.latitude, position.coords.longitude]])});
@@ -111,9 +114,16 @@ class App extends React.Component {
 
 render(){
 
-  if(password_list.includes(this.state.password)){
+  const {
+    user,
+    signOut,
+    signInWithGoogle,
+  } = this.props;
+
+  if(user){
 
     return (
+
 
       <div className="App">
 
@@ -181,17 +191,20 @@ render(){
 
         <br></br>
 
-        <Grid container item xs={12} spacing={1}>
 
-          <Grid item xs={3}></Grid>
-          <Grid item xs={6}>
-            <center><Button variant="contained" onClick={() => this.setState({password : "null"})}>View Data</Button></center>
-          </Grid>
-          <Grid item xs={3}></Grid>
-
-        </Grid>
+        <footer>
+          <center>
+          {
+            user
+              ? <button onClick={signOut}>Sign out</button>
+              : <button onClick={signInWithGoogle}>Sign in with Google</button>
+          }
+          </center>
+        </footer>
 
       </div>
+
+
     );
   }
 
@@ -200,15 +213,27 @@ render(){
       <div className="App">
 
         <header className="App-header">
-          <h2><center>MASK MAP NYC</center></h2>
+          <h1><center>MASK MAP NYC</center></h1>
         </header>
+
+        <br></br>
+
+        <Grid container item xs={12} spacing={1}>
+
+            <Emoji img={glasses}></Emoji>
+            <Emoji img={maskhole} ></Emoji>
+            <Emoji img={no_mask}></Emoji>
+
+        </Grid>
+
+        <br></br>
 
         <div className="leaflet-container">
 
           <Grid container item xs={12} spacing={1}>
             <Grid item xs={2}></Grid>
             <Grid item xs={8}>
-                  <Map center={[40.762295, -73.968148]} zoom={15}>
+                  <Map center={[40.760186, -73.972084]} zoom={12}>
                   <HeatmapLayer
                     fitBoundsOnLoad
                     fitBoundsOnUpdate
@@ -229,6 +254,23 @@ render(){
           </Grid>
           </div>
 
+          <br></br>
+
+        <footer>
+          <center>
+          {
+            user
+              ? <h3> </h3>
+              : <h3>Please sign in to log data.</h3>
+          }
+          {
+            user
+              ? <button onClick={signOut}>Sign out</button>
+              : <button onClick={signInWithGoogle}>Sign in with Google</button>
+          }
+          </center>
+        </footer>
+
       </div>
     );
   }
@@ -236,4 +278,7 @@ render(){
 
 }
 
-export default App;
+export default withFirebaseAuth({
+  providers,
+  firebaseAppAuth,
+})(App);
