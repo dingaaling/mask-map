@@ -69,8 +69,9 @@ class App extends React.Component {
     this.getLocation()
   };
 
-  isUserLggedIn(user) {
-    return user != null;
+  isUserLggedIn() {
+
+    return this.props.user != null;
   }
 
   imageClick(maskStatus) {
@@ -86,7 +87,7 @@ class App extends React.Component {
                 accuracy: position.coords.accuracy,
               };
 
-              //firebaseApp.database().ref('/').push(body);
+              firebaseApp.database().ref('/').push(body);
               console.log("Data Saved");
 
               switch (maskStatus) {
@@ -112,7 +113,7 @@ getLineSeparator() {
   return <br></br>;
 }
 
-getFooter(props) {
+getSigninButton(props) {
   const {
     user,
     signOut,
@@ -124,7 +125,7 @@ getFooter(props) {
       {
         user
           ? <button onClick={signOut}>SIGN OUT</button>
-          : <button onClick={signInWithGoogle}>SIGN IN</button>
+          : <button onClick={signInWithGoogle}>SIGN IN TO LOG DATA</button>
       }
       </center>
     </footer>
@@ -140,13 +141,14 @@ render(){
       </header>
       {this.getLineSeparator()}
 
-      <Emojis onClick = {() => this.imageClick()}
+      <Emojis onClick = {(param) => this.imageClick(param)}
         mask_list = {this.state.mask_list}
         maskhole_list = {this.state.maskhole_list}
         nomask_list = {this.state.nomask_list}
         is_user_logged_in = {this.isUserLggedIn()}>
       </Emojis>
 
+      {!this.isUserLggedIn() && this.getLineSeparator()}
 
       {this.isUserLggedIn() && <PathMap map_center = {this.state.map_center}
         mask_list = {this.state.mask_list}
@@ -158,7 +160,7 @@ render(){
 
       {this.getLineSeparator()}
 
-     {this.getFooter(this.props)}
+     {this.getSigninButton(this.props)}
 
      </div>
     );
