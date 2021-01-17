@@ -12,10 +12,10 @@
 }
 
 p {
-  font-family: 'Roboto', sans-serif;
   color: #A9CEF4;
+  font-family: 'Roboto Condensed', sans-serif;
   font-weight: 1000;
-  font-size: calc(10px + 4vmin);
+  font-size: calc(10px + 1vmin);
 }
 
 h1 {
@@ -25,20 +25,13 @@ h1 {
     font-family: 'Roboto Condensed', sans-serif;
 }
 
-h2 {
-    line-height: 200%;
-    margin-bottom: 0px;
-    margin-top: 0px;
-    font-family: 'Roboto Condensed', sans-serif;
-}
-
-
 h3 {
     line-height: 200%;
     margin-bottom: 0px;
     margin-top: 0px;
+    color: #A9CEF4;
     font-family: 'Roboto Condensed', sans-serif;
-    font-size: calc(10px + 1vmin);
+    font-size: calc(10px + 3vmin);
 }
 
 button {
