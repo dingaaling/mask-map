@@ -128,7 +128,7 @@ class App extends React.Component {
               this.setState({glasses_im: 0, maskhole_im: 0, nomask_im: 1})
               break;
             default:
-              this.setState({glasses_im: 0, maskhole_im: 1, nomask_im: 1})
+              this.setState({glasses_im: 1, maskhole_im: 0, nomask_im: 0})
 
           }
 
