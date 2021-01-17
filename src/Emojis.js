@@ -9,6 +9,9 @@ import no_mask_bw from './images/no_mask_bw.png'
 import maskhole_bw from './images/maskhole_bw.png'
 import Grid from '@material-ui/core/Grid';
 
+const glasses_list = [glasses_bw, glasses]
+const maskhole_list = [maskhole_bw, maskhole]
+const nomask_list = [no_mask_bw, no_mask]
 
 
 class Emojis extends React.Component {
@@ -25,9 +28,9 @@ render(){
       }
 
       {!this.props.is_user_logged_in && <Grid container item xs={12} spacing={1}>
-          <Emoji img={glasses} function = {() => this.props.onClick(0)}></Emoji>
-          <Emoji img={maskhole} function = {() => this.props.onClick(1)}></Emoji>
-          <Emoji img={no_mask} function = {() => this.props.onClick(2)}></Emoji>
+          <Emoji img={glasses_list[this.props.glasses_im]} function = {() => this.props.onClick(0)}></Emoji>
+          <Emoji img={maskhole_list[this.props.maskhole_im]} function = {() => this.props.onClick(1)}></Emoji>
+          <Emoji img={nomask_list[this.props.nomask_im]} function = {() => this.props.onClick(2)}></Emoji>
       </Grid>
       }
 
