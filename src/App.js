@@ -30,7 +30,8 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = { map_center : [40.762295, -73.968148],
-                  mask_list : [], maskhole_list : [], nomask_list : [], heat_data : mask_data};
+                  mask_list : [], maskhole_list : [], nomask_list : [], heat_data : mask_data,
+                  glasses_im: 1, maskhole_im: 0, nomask_im: 0};
     this.showPosition = this.showPosition.bind(this)
     this.imageClick = this.imageClick.bind(this)
 
@@ -116,6 +117,21 @@ class App extends React.Component {
           }
       } else {
           this.setState({heat_data: heat_data_list[maskStatus]})
+          switch (maskStatus) {
+            case 0:
+              this.setState({glasses_im: 1, maskhole_im: 0, nomask_im: 0})
+              break;
+            case 1:
+              this.setState({glasses_im: 0, maskhole_im: 1, nomask_im: 0})
+              break;
+            case 2:
+              this.setState({glasses_im: 0, maskhole_im: 0, nomask_im: 1})
+              break;
+            default:
+              this.setState({glasses_im: 0, maskhole_im: 1, nomask_im: 1})
+
+          }
+
       }
 }
 
@@ -158,6 +174,9 @@ render(){
         maskhole_list = {this.state.maskhole_list}
         nomask_list = {this.state.nomask_list}
         mask_status = {this.state.mask_status}
+        glasses_im = {this.state.glasses_im}
+        maskhole_im = {this.state.maskhole_im}
+        nomask_im = {this.state.nomask_im}
         is_user_logged_in = {this.isUserLggedIn()}>
       </Emojis>
 
