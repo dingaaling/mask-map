@@ -3,7 +3,6 @@ import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import {  Map, TileLayer } from 'react-leaflet'
 import HeatmapLayer from 'react-leaflet-heatmap-layer';
-import { nycdata } from './2020_maskhole_data';
 
 
 
@@ -21,8 +20,8 @@ render(){
                   fitBoundsOnLoad
                   fitBoundsOnUpdate
                   max={1.0}
-                  radius={15}
-                  points={nycdata}
+                  radius={12}
+                  points={this.props.heat_data}
                   longitudeExtractor={m => m[1]}
                   latitudeExtractor={m => m[0]}
                   intensityExtractor={m => parseFloat(m[2])} />

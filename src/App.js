@@ -11,6 +11,7 @@ import firebaseConfig from './config.js'
 import Emojis from './Emojis.js';
 import HeatMap from './HeatMap.js'
 import PathMap from './PathMap.js'
+import { mask_data, maskhole_data, nomask_data } from './mask_data';
 
 //Styling
 import './App.css'
@@ -22,12 +23,14 @@ const providers = {
   googleProvider: new firebase.auth.GoogleAuthProvider(),
 };
 
+const heat_data_list = [mask_data, maskhole_data, nomask_data]
+
 class App extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = { map_center : [40.762295, -73.968148],
-                  mask_list : [], maskhole_list : [], nomask_list : []};
+                  mask_list : [], maskhole_list : [], nomask_list : [], heat_data : mask_data};
     this.showPosition = this.showPosition.bind(this)
     this.imageClick = this.imageClick.bind(this)
 
@@ -75,38 +78,45 @@ class App extends React.Component {
   }
 
   imageClick(maskStatus) {
-      let current_this = this
-      if(navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(function(position) {
-              // log to database
-              let body = {
-                timestamp: new Date().toUTCString(),
-                mask_status: maskStatus,
-                latitude : position.coords.latitude,
-                longitude : position.coords.longitude,
-                accuracy: position.coords.accuracy,
-              };
 
-              firebaseApp.database().ref('/').push(body);
-              console.log("Data Saved");
 
-              switch (maskStatus) {
-                case 0:
-                  current_this.setState({mask_list: current_this.state.mask_list.concat([[position.coords.latitude, position.coords.longitude]])});
-                  break;
-                case 1:
-                  current_this.setState({maskhole_list: current_this.state.maskhole_list.concat([[position.coords.latitude, position.coords.longitude]])});
-                  break;
-                case 2:
-                  current_this.setState({nomask_list: current_this.state.nomask_list.concat([[position.coords.latitude, position.coords.longitude]])});
-                  break;
-                default:
-                  current_this.setState({map_center: [position.coords.latitude, position.coords.longitude]});
-              };
-    });
-  } else {
-      alert("Geolocation error - please refresh page.");
-  }
+      if(this.isUserLggedIn()){
+
+        let current_this = this
+        if(navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                // log to database
+                let body = {
+                  timestamp: new Date().toUTCString(),
+                  mask_status: maskStatus,
+                  latitude : position.coords.latitude,
+                  longitude : position.coords.longitude,
+                  accuracy: position.coords.accuracy,
+                };
+
+                firebaseApp.database().ref('/').push(body);
+                console.log("Data Saved");
+
+                switch (maskStatus) {
+                  case 0:
+                    current_this.setState({mask_list: current_this.state.mask_list.concat([[position.coords.latitude, position.coords.longitude]])});
+                    break;
+                  case 1:
+                    current_this.setState({maskhole_list: current_this.state.maskhole_list.concat([[position.coords.latitude, position.coords.longitude]])});
+                    break;
+                  case 2:
+                    current_this.setState({nomask_list: current_this.state.nomask_list.concat([[position.coords.latitude, position.coords.longitude]])});
+                    break;
+                  default:
+                    current_this.setState({map_center: [position.coords.latitude, position.coords.longitude]});
+                };
+              });
+        } else {
+          alert("Geolocation error - please refresh page.");
+          }
+      } else {
+          this.setState({heat_data: heat_data_list[maskStatus]})
+      }
 }
 
 getLineSeparator() {
@@ -139,12 +149,15 @@ render(){
       <header className="App-header">
         <h1><center>MASK MAP</center></h1>
       </header>
-      {this.getLineSeparator()}
+
+      {this.isUserLggedIn() && this.getLineSeparator()}
+      {!this.isUserLggedIn() && <center><p>SELECT AN EMOJI TO VIEW CORRESPONDING DATA</p></center>}
 
       <Emojis onClick = {(param) => this.imageClick(param)}
         mask_list = {this.state.mask_list}
         maskhole_list = {this.state.maskhole_list}
         nomask_list = {this.state.nomask_list}
+        mask_status = {this.state.mask_status}
         is_user_logged_in = {this.isUserLggedIn()}>
       </Emojis>
 
@@ -156,7 +169,7 @@ render(){
         nomask_list = {this.state.nomask_list}/>
       }
 
-      {!this.isUserLggedIn() && <HeatMap/>}
+      {!this.isUserLggedIn() && <HeatMap heat_data = {this.state.heat_data}/>}
 
       {this.getLineSeparator()}
 
