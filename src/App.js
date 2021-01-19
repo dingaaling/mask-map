@@ -11,7 +11,8 @@ import firebaseConfig from './config.js'
 import Emojis from './Emojis.js';
 import HeatMap from './HeatMap.js'
 import PathMap from './PathMap.js'
-import { mask_data, maskhole_data, nomask_data } from './mask_data';
+import { mask_data, maskhole_data, nomask_data } from './data/mask_data';
+import { mask_rates, maskhole_rates, nomask_rates } from './data/mask_rates_4';
 
 //Styling
 import './App.css'
@@ -23,7 +24,7 @@ const providers = {
   googleProvider: new firebase.auth.GoogleAuthProvider(),
 };
 
-const heat_data_list = [mask_data, maskhole_data, nomask_data]
+const heat_data_list = [mask_rates, maskhole_rates, nomask_rates]
 
 class App extends React.Component {
 
@@ -31,7 +32,7 @@ class App extends React.Component {
     super(props);
     this.state = { map_center : [40.762295, -73.968148],
                   mask_list : [], maskhole_list : [], nomask_list : [], heat_data : mask_data,
-                  glasses_im: 1, maskhole_im: 0, nomask_im: 0};
+                  glasses_im: 1, maskhole_im: 0, nomask_im: 0, heatmap_range: [0.0, 1.0]};
     this.showPosition = this.showPosition.bind(this)
     this.imageClick = this.imageClick.bind(this)
 
@@ -123,12 +124,15 @@ class App extends React.Component {
               break;
             case 1:
               this.setState({glasses_im: 0, maskhole_im: 1, nomask_im: 0})
+              this.setState({heatmap_range: [0.0, 0.2]})
               break;
             case 2:
               this.setState({glasses_im: 0, maskhole_im: 0, nomask_im: 1})
+              this.setState({heatmap_range: [0.0, 0.2]})
               break;
             default:
               this.setState({glasses_im: 1, maskhole_im: 0, nomask_im: 0})
+              this.setState({heatmap_range: [0.0, 1.0]})
 
           }
 
@@ -167,7 +171,7 @@ render(){
       </header>
 
       {this.isUserLggedIn() && this.getLineSeparator()}
-      {!this.isUserLggedIn() && <center><p>SELECT AN EMOJI TO VIEW CORRESPONDING DATA</p></center>}
+      {!this.isUserLggedIn() && <center><p>SELECT AN EMOJI TO EXPLORE WHERE RATES ARE HIGHEST</p></center>}
 
       <Emojis onClick = {(param) => this.imageClick(param)}
         mask_list = {this.state.mask_list}
@@ -188,7 +192,9 @@ render(){
         nomask_list = {this.state.nomask_list}/>
       }
 
-      {!this.isUserLggedIn() && <HeatMap heat_data = {this.state.heat_data}/>}
+      {!this.isUserLggedIn() && <HeatMap heat_data = {this.state.heat_data}
+      heatmap_range = {this.state.heatmap_range}
+      />}
 
       {this.getLineSeparator()}
 
