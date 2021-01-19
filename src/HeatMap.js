@@ -17,7 +17,8 @@ render(){
                 <HeatmapLayer
                   fitBoundsOnLoad
                   fitBoundsOnUpdate
-                  max={1.0}
+                  min={this.props.heatmap_range[0]}
+                  max={this.props.heatmap_range[1]}
                   radius={12}
                   points={this.props.heat_data}
                   longitudeExtractor={m => m[1]}

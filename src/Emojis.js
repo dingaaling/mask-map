@@ -49,13 +49,13 @@ render(){
 
     {!this.props.is_user_logged_in && <Grid container item xs={12} spacing={1}>
       <Grid item xs={4}>
-        <center><h3>74.4%</h3></center>
+        <center><h3>75%</h3></center>
       </Grid>
       <Grid item xs={4}>
-        <center><h3>13.6%</h3></center>
+        <center><h3>12%</h3></center>
       </Grid>
       <Grid item xs={4}>
-        <center><h3>12.0%</h3></center>
+        <center><h3>13%</h3></center>
       </Grid>
     </Grid>
   }
