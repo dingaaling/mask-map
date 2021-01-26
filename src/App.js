@@ -12,7 +12,7 @@ import Emojis from './Emojis.js';
 import HeatMap from './HeatMap.js'
 import PathMap from './PathMap.js'
 import { mask_data, maskhole_data, nomask_data } from './data/mask_data';
-import { mask_rates, maskhole_rates, nomask_rates } from './data/mask_rates_4';
+import { mask_rates, maskhole_rates, nomask_rates } from './data/mask_01242021';
 
 //Styling
 import './App.css'
@@ -171,7 +171,7 @@ render(){
       </header>
 
       {this.isUserLggedIn() && this.getLineSeparator()}
-      {!this.isUserLggedIn() && <center><p>SELECT AN EMOJI TO EXPLORE WHERE RATES ARE HIGHEST</p></center>}
+      {!this.isUserLggedIn() && <center><p>SELECT AN EMOJI TO EXPLORE CORRESPONDING DATA.</p></center>}
 
       <Emojis onClick = {(param) => this.imageClick(param)}
         mask_list = {this.state.mask_list}
@@ -199,6 +199,8 @@ render(){
       {this.getLineSeparator()}
 
      {this.getSigninButton(this.props)}
+     {!this.isUserLggedIn() && <center><p><a href="https://jending.medium.com/mapping-mask-behavior-in-your-neighborhood-a5ab15380761">LEARN MORE ABOUT THE PROJECT HERE</a></p></center>}
+
 
      </div>
     );

@@ -11,6 +11,16 @@
   color: #000000;
 }
 
+a:link {
+  color: #A9CEF4;
+  background-color: transparent;
+}
+
+a:visited {
+  color: #A9CEF4;
+  background-color: transparent;
+}
+
 p {
   color: #A9CEF4;
   font-family: 'Roboto Condensed', sans-serif;
