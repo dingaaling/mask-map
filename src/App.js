@@ -200,6 +200,7 @@ render(){
 
      {this.getSigninButton(this.props)}
      {!this.isUserLggedIn() && <center><p><a href="https://jending.medium.com/mapping-mask-behavior-in-your-neighborhood-a5ab15380761">LEARN MORE ABOUT THE PROJECT HERE</a></p></center>}
+     {this.isUserLggedIn() && <center><p>If counts remain at 0, check your Location Services settings and make sure Location Access is enabled for your browser. </p></center>}
 
 
      </div>
