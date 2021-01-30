@@ -35,24 +35,26 @@ class App extends React.Component {
                   glasses_im: 1, maskhole_im: 0, nomask_im: 0, heatmap_range: [0.0, 1.0]};
     this.showPosition = this.showPosition.bind(this)
     this.imageClick = this.imageClick.bind(this)
+    this.updateData = this.updateData.bind(this)
 
   }
 
   showPosition(position) {
-      console.log("Logging at: " + position.coords.latitude.toString() +", "+ position.coords.longitude.toString());
+      // console.log("Logging at: " + position.coords.latitude.toString() +", "+ position.coords.longitude.toString());
       this.setState({latitude : position.coords.latitude, longitude : position.coords.longitude, map_center : [position.coords.latitude, position.coords.longitude]});
   }
 
   showError(error) {
+
     switch(error.code) {
       case error.PERMISSION_DENIED:
-        alert("User denied the request for Geolocation.")
+        alert("User denied the request for Geolocation. To log data, please enable Location Services for your browser.")
         break;
       case error.POSITION_UNAVAILABLE:
-        alert("Location information is unavailable.")
+        alert("Location information is unavailable. To log data, please enable Location Services for your browser.")
         break;
       case error.TIMEOUT:
-        alert("The request to get user location timed out.")
+        alert("To log data, please enable Location Services for your browser.")
         break;
       case error.UNKNOWN_ERROR:
         alert("An unknown error occurred.")
@@ -64,15 +66,44 @@ class App extends React.Component {
 
   getLocation() {
       if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(this.showPosition, this.showError);
+          navigator.geolocation.getCurrentPosition(this.showPosition, this.showError, {timeout:10000,enableHighAccuracy:true});
       } else {
-          console.log("Geolocation is not supported by this browser.");
+          alert("Geolocation is not supported by this browser. To log data, please enable Location Services for your browser.");
       }
+  }
+
+  updateData(position, maskStatus) {
+
+    let body = {
+      timestamp: new Date().toUTCString(),
+      mask_status: maskStatus,
+      latitude : position.coords.latitude,
+      longitude : position.coords.longitude,
+      accuracy: position.coords.accuracy,
+    };
+
+    firebaseApp.database().ref('/').push(body);
+
+    switch (maskStatus) {
+      case 0:
+        this.setState({mask_list: this.state.mask_list.concat([[position.coords.latitude, position.coords.longitude]])});
+        break;
+      case 1:
+        this.setState({maskhole_list: this.state.maskhole_list.concat([[position.coords.latitude, position.coords.longitude]])});
+        break;
+      case 2:
+        this.setState({nomask_list: this.state.nomask_list.concat([[position.coords.latitude, position.coords.longitude]])});
+        break;
+      default:
+        this.setState({map_center: [position.coords.latitude, position.coords.longitude]});
+    };
   }
 
   componentDidMount() {
     this.getLocation()
   };
+
+
 
   isUserLggedIn() {
 
@@ -84,35 +115,8 @@ class App extends React.Component {
 
       if(this.isUserLggedIn()){
 
-        let current_this = this
         if(navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function(position) {
-                // log to database
-                let body = {
-                  timestamp: new Date().toUTCString(),
-                  mask_status: maskStatus,
-                  latitude : position.coords.latitude,
-                  longitude : position.coords.longitude,
-                  accuracy: position.coords.accuracy,
-                };
-
-                firebaseApp.database().ref('/').push(body);
-                console.log("Data Saved");
-
-                switch (maskStatus) {
-                  case 0:
-                    current_this.setState({mask_list: current_this.state.mask_list.concat([[position.coords.latitude, position.coords.longitude]])});
-                    break;
-                  case 1:
-                    current_this.setState({maskhole_list: current_this.state.maskhole_list.concat([[position.coords.latitude, position.coords.longitude]])});
-                    break;
-                  case 2:
-                    current_this.setState({nomask_list: current_this.state.nomask_list.concat([[position.coords.latitude, position.coords.longitude]])});
-                    break;
-                  default:
-                    current_this.setState({map_center: [position.coords.latitude, position.coords.longitude]});
-                };
-              });
+            navigator.geolocation.getCurrentPosition((position) => this.updateData(position, maskStatus), this.showError, {timeout:5000,enableHighAccuracy:true});
         } else {
           alert("Geolocation error - please refresh page.");
           }
@@ -171,6 +175,7 @@ render(){
       </header>
 
       {this.isUserLggedIn() && this.getLineSeparator()}
+      {this.isUserLggedIn() && this.getLineSeparator()}
       {!this.isUserLggedIn() && <center><p>SELECT AN EMOJI TO EXPLORE CORRESPONDING DATA.</p></center>}
 
       <Emojis onClick = {(param) => this.imageClick(param)}
@@ -200,7 +205,7 @@ render(){
 
      {this.getSigninButton(this.props)}
      {!this.isUserLggedIn() && <center><p><a href="https://jending.medium.com/mapping-mask-behavior-in-your-neighborhood-a5ab15380761">LEARN MORE ABOUT THE PROJECT HERE</a></p></center>}
-     {this.isUserLggedIn() && <center><p>If counts remain at 0, check your Location Services settings and make sure Location Access is enabled for your browser. </p></center>}
+     {this.isUserLggedIn() && this.getLineSeparator()}
 
 
      </div>
