@@ -11,28 +11,30 @@ import firebaseConfig from './config.js'
 import Emojis from './Emojis.js';
 import HeatMap from './HeatMap.js'
 import PathMap from './PathMap.js'
-import { mask_data, maskhole_data, nomask_data } from './data/mask_data';
-import { mask_rates, maskhole_rates, nomask_rates } from './data/mask_01242021';
+import EmojiMap from './EmojiMap.js'
+import { mask_rates, maskhole_rates, nomask_rates } from './data/nyc_012021';
+import { mask_gps, maskhole_gps, nomask_gps } from './data/latlon';
 
 //Styling
 import './App.css'
 
-
+//Variables
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 const firebaseAppAuth = firebaseApp.auth();
 const providers = {
   googleProvider: new firebase.auth.GoogleAuthProvider(),
 };
 
-const heat_data_list = [mask_rates, maskhole_rates, nomask_rates]
+const heat_data_list = [mask_rates, maskhole_rates, nomask_rates];
+// const heat_data_list = [mask_gps, maskhole_gps, nomask_gps];
 
 class App extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { map_center : [40.762295, -73.968148],
-                  mask_list : [], maskhole_list : [], nomask_list : [], heat_data : mask_data,
-                  glasses_im: 1, maskhole_im: 0, nomask_im: 0, heatmap_range: [0.0, 1.0]};
+    this.state = { map_center : [40.762295, -73.968148], heatmap: true,
+                  mask_list : [], maskhole_list : [], nomask_list : [], heat_data : heat_data_list[0],
+                  glasses_im: 1, maskhole_im: 0, nomask_im: 0, heatmap_range: [0.0, 0.75]};
     this.showPosition = this.showPosition.bind(this)
     this.imageClick = this.imageClick.bind(this)
     this.updateData = this.updateData.bind(this)
@@ -66,7 +68,7 @@ class App extends React.Component {
 
   getLocation() {
       if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(this.showPosition, this.showError, {timeout:10000,enableHighAccuracy:true});
+          navigator.geolocation.getCurrentPosition(this.showPosition, this.showError, {timeout:20000,enableHighAccuracy:true});
       } else {
           alert("Geolocation is not supported by this browser. To log data, please enable Location Services for your browser.");
       }
@@ -125,6 +127,7 @@ class App extends React.Component {
           switch (maskStatus) {
             case 0:
               this.setState({glasses_im: 1, maskhole_im: 0, nomask_im: 0})
+              this.setState({heatmap_range: [0.0, 0.75]})
               break;
             case 1:
               this.setState({glasses_im: 0, maskhole_im: 1, nomask_im: 0})
@@ -197,9 +200,17 @@ render(){
         nomask_list = {this.state.nomask_list}/>
       }
 
-      {!this.isUserLggedIn() && <HeatMap heat_data = {this.state.heat_data}
-      heatmap_range = {this.state.heatmap_range}
+      {!this.isUserLggedIn() && this.state.heatmap && <HeatMap heat_data = {this.state.heat_data}
+            heatmap_range = {this.state.heatmap_range}
       />}
+
+      {!this.isUserLggedIn() && !this.state.heatmap && <EmojiMap map_center = {this.state.map_center}
+        heat_data = {this.state.heat_data}
+        glasses_im = {this.state.glasses_im}
+        maskhole_im = {this.state.maskhole_im}
+        nomask_im = {this.state.nomask_im}
+        />
+      }
 
       {this.getLineSeparator()}
 
