@@ -25,14 +25,14 @@ const providers = {
   googleProvider: new firebase.auth.GoogleAuthProvider(),
 };
 
-const heat_data_list = [mask_rates, maskhole_rates, nomask_rates];
-// const heat_data_list = [mask_gps, maskhole_gps, nomask_gps];
+// const heat_data_list = [mask_rates, maskhole_rates, nomask_rates];
+const heat_data_list = [mask_gps, maskhole_gps, nomask_gps];
 
 class App extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { map_center : [40.762295, -73.968148], heatmap: true,
+    this.state = { map_center : [40.762295, -73.968148], heatmap: false,
                   mask_list : [], maskhole_list : [], nomask_list : [], heat_data : heat_data_list[0],
                   glasses_im: 1, maskhole_im: 0, nomask_im: 0, heatmap_range: [0.0, 0.75]};
     this.showPosition = this.showPosition.bind(this)
