@@ -12,11 +12,23 @@ import Emojis from './Emojis.js';
 import HeatMap from './HeatMap.js'
 import PathMap from './PathMap.js'
 import EmojiMap from './EmojiMap.js'
-import { mask_rates, maskhole_rates, nomask_rates } from './data/nyc_012021';
-import { mask_gps, maskhole_gps, nomask_gps } from './data/latlon';
+// import { mask_rates, maskhole_rates, nomask_rates } from './data/nyc_020621';
+import { mask_gps, maskhole_gps, nomask_gps } from './data/latlon_above75';
 
 //Styling
 import './App.css'
+
+import * as Sentry from "@sentry/react";
+import { Integrations } from "@sentry/tracing";
+
+Sentry.init({
+  dsn: "https://1db0d616b0104d639e2f3892e8c6ec78@o517547.ingest.sentry.io/5625522",
+  integrations: [new Integrations.BrowserTracing()],
+
+  // We recommend adjusting this value in production, or using tracesSampler
+  // for finer control
+  tracesSampleRate: 0.5,
+});
 
 //Variables
 const firebaseApp = firebase.initializeApp(firebaseConfig);
@@ -48,21 +60,20 @@ class App extends React.Component {
 
   showError(error) {
 
+    const errorMessage =  { code : 1, message : "Location Settings error" };
+
     switch(error.code) {
       case error.PERMISSION_DENIED:
         alert("User denied the request for Geolocation. To log data, please enable Location Services for your browser.")
-        break;
-      case error.POSITION_UNAVAILABLE:
-        alert("Location information is unavailable. To log data, please enable Location Services for your browser.")
+        throw errorMessage;
         break;
       case error.TIMEOUT:
         alert("To log data, please enable Location Services for your browser.")
-        break;
-      case error.UNKNOWN_ERROR:
-        alert("An unknown error occurred.")
+        throw errorMessage;
         break;
       default:
-        alert("An unknown error occurred.")
+        alert("To log data, please enable Location Services for your browser.")
+        throw errorMessage;
     }
   }
 
@@ -114,7 +125,6 @@ class App extends React.Component {
 
   imageClick(maskStatus) {
 
-
       if(this.isUserLggedIn()){
 
         if(navigator.geolocation) {
@@ -131,11 +141,11 @@ class App extends React.Component {
               break;
             case 1:
               this.setState({glasses_im: 0, maskhole_im: 1, nomask_im: 0})
-              this.setState({heatmap_range: [0.0, 0.2]})
+              this.setState({heatmap_range: [0.0, 0.15]})
               break;
             case 2:
               this.setState({glasses_im: 0, maskhole_im: 0, nomask_im: 1})
-              this.setState({heatmap_range: [0.0, 0.2]})
+              this.setState({heatmap_range: [0.0, 0.15]})
               break;
             default:
               this.setState({glasses_im: 1, maskhole_im: 0, nomask_im: 0})
@@ -179,7 +189,7 @@ render(){
 
       {this.isUserLggedIn() && this.getLineSeparator()}
       {this.isUserLggedIn() && this.getLineSeparator()}
-      {!this.isUserLggedIn() && <center><p>SELECT AN EMOJI TO EXPLORE CORRESPONDING DATA.</p></center>}
+      {!this.isUserLggedIn() && <center><p>SELECT AN EMOJI TO EXPLORE WHERE THAT MASK BEHAVIOR IS ABOVE AVERAGE.</p></center>}
 
       <Emojis onClick = {(param) => this.imageClick(param)}
         mask_list = {this.state.mask_list}
