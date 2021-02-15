@@ -2,6 +2,7 @@
 
 ./firebase/*
 .firebaserc
+.firebase/
 
 *rules.json*
 
