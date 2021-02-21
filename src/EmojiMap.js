@@ -26,7 +26,7 @@ render(){
         <Grid container item xs={12} spacing={1}>
           <Grid item xs={2}></Grid>
           <Grid item xs={8}>
-                <Map center={[40.766069, -73.957138]} zoom={13}>
+                <Map center={[40.754302, -73.976192]} zoom={12}>
                 <TileLayer
                   attribution='&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
                   url='https://{s}.tile.osm.org/{z}/{x}/{y}.png'
