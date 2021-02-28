@@ -13,7 +13,7 @@ import HeatMap from './HeatMap.js'
 import PathMap from './PathMap.js'
 import EmojiMap from './EmojiMap.js'
 // import { mask_rates, maskhole_rates, nomask_rates } from './data/nyc_020621';
-import { mask_gps, maskhole_gps, nomask_gps } from './data/latlon_above75';
+import { mask_gps, maskhole_gps, nomask_gps } from './data/latlon_above75_022721';
 
 //Styling
 import './App.css'

@@ -52,10 +52,10 @@ render(){
         <center><h3>79%</h3></center>
       </Grid>
       <Grid item xs={4}>
-        <center><h3>9%</h3></center>
+        <center><h3>10%</h3></center>
       </Grid>
       <Grid item xs={4}>
-        <center><h3>12%</h3></center>
+        <center><h3>11%</h3></center>
       </Grid>
     </Grid>
   }
