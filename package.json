@@ -13,6 +13,7 @@
     "firebase": "^7.23.0",
     "leaflet": "^1.7.1",
     "react": "^16.13.1",
+    "react-datawrapper-chart": "^1.1.0",
     "react-dom": "^16.13.1",
     "react-leaflet": "^2.7.0",
     "react-leaflet-heatmap-layer": "^2.0.0",

@@ -14,9 +14,11 @@ import PathMap from './PathMap.js'
 import EmojiMap from './EmojiMap.js'
 // import { mask_rates, maskhole_rates, nomask_rates } from './data/nyc_020621';
 import { mask_gps, maskhole_gps, nomask_gps } from './data/latlon_above75_022721';
+import DWChart from "react-datawrapper-chart";
 
 //Styling
 import './App.css'
+import Grid from '@material-ui/core/Grid';
 
 import * as Sentry from "@sentry/react";
 import { Integrations } from "@sentry/tracing";
@@ -189,7 +191,7 @@ render(){
 
       {this.isUserLggedIn() && this.getLineSeparator()}
       {this.isUserLggedIn() && this.getLineSeparator()}
-      {!this.isUserLggedIn() && <center><p>SELECT AN EMOJI TO EXPLORE WHERE THAT MASK BEHAVIOR IS ABOVE AVERAGE.</p></center>}
+      {!this.isUserLggedIn() && <center><p>SELECT AN EMOJI TO EXPLORE WHERE IT IS ABOVE AVERAGE. LEARN MORE ABOUT THE PROJECT <a href="https://jending.medium.com/mapping-mask-behavior-in-your-neighborhood-a5ab15380761">HERE</a>.</p></center>}
 
       <Emojis onClick = {(param) => this.imageClick(param)}
         mask_list = {this.state.mask_list}
@@ -222,12 +224,21 @@ render(){
         />
       }
 
-      {this.getLineSeparator()}
+    {this.getLineSeparator()}
+    {this.getSigninButton(this.props)}
+    {this.getLineSeparator()}
 
-     {this.getSigninButton(this.props)}
-     {!this.isUserLggedIn() && <center><p><a href="https://jending.medium.com/mapping-mask-behavior-in-your-neighborhood-a5ab15380761">LEARN MORE ABOUT THE PROJECT HERE</a></p></center>}
-     {this.isUserLggedIn() && this.getLineSeparator()}
+    {!this.isUserLggedIn() && this.getLineSeparator() && this.getLineSeparator()}
+    {!this.isUserLggedIn() && <center><p>ZOOM IN TO EXPLORE UNMASKED RATES BY ZIPCODE.</p></center>}
 
+     {!this.isUserLggedIn() &&
+      <Grid container item xs={12} spacing={1}>
+       <Grid item xs={4}></Grid>
+       <Grid item xs={4}>
+           <DWChart title="Map" src="//datawrapper.dwcdn.net/6k4n2/5/" />
+       </Grid>
+       <Grid item xs={4}></Grid>
+     </Grid>}
 
      </div>
     );
