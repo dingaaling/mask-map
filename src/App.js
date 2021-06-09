@@ -227,18 +227,7 @@ render(){
     {this.getLineSeparator()}
     {this.getSigninButton(this.props)}
     {this.getLineSeparator()}
-
-    {!this.isUserLggedIn() && this.getLineSeparator() && this.getLineSeparator()}
-    {!this.isUserLggedIn() && <center><p>ZOOM IN TO EXPLORE UNMASKED RATES BY ZIPCODE.</p></center>}
-
-     {!this.isUserLggedIn() &&
-      <Grid container item xs={12} spacing={1}>
-       <Grid item xs={2}></Grid>
-       <Grid item xs={8}>
-           <DWChart title="Map" src="//datawrapper.dwcdn.net/6k4n2/5/" />
-       </Grid>
-       <Grid item xs={2}></Grid>
-     </Grid>}
+    {!this.isUserLggedIn() && <center><p>LAST UPDATED: MARCH 2021</p></center>}
 
      </div>
     );
